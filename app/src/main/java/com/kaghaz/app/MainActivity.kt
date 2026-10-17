@@ -66,8 +66,14 @@ class MainActivity : AppCompatActivity() {
 
     data class Note(val file: File, val title: String, val snippet: String, val date: String)
 
+    private class VH(v: View) : RecyclerView.ViewHolder(v) {
+        val title: TextView = v.findViewById(R.id.noteTitle)
+        val snippet: TextView = v.findViewById(R.id.noteSnippet)
+        val date: TextView = v.findViewById(R.id.noteDate)
+    }
+
     inner class NotesAdapter(private val onClick: (File) -> Unit) :
-        RecyclerView.Adapter<NotesAdapter.VH>() {
+        RecyclerView.Adapter<VH>() {
 
         private val items = mutableListOf<Note>()
         private val fmt = SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault())
@@ -86,12 +92,6 @@ class MainActivity : AppCompatActivity() {
                 items.add(Note(f, title, snippet, fmt.format(Date(f.lastModified()))))
             }
             notifyDataSetChanged()
-        }
-
-        class VH(v: View) : RecyclerView.ViewHolder(v) {
-            val title: TextView = v.findViewById(R.id.noteTitle)
-            val snippet: TextView = v.findViewById(R.id.noteSnippet)
-            val date: TextView = v.findViewById(R.id.noteDate)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
