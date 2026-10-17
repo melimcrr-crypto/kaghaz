@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     data class Note(val file: File, val title: String, val snippet: String, val date: String)
 
-    private class VH(v: View) : RecyclerView.ViewHolder(v) {
+    class VH(v: View) : RecyclerView.ViewHolder(v) {
         val title: TextView = v.findViewById(R.id.noteTitle)
         val snippet: TextView = v.findViewById(R.id.noteSnippet)
         val date: TextView = v.findViewById(R.id.noteDate)
