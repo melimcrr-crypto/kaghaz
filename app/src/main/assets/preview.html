@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: sans-serif; background:#FAF7F0; color:#2B2B2B; padding:16px; line-height:1.9; margin:0; }
+  h1,h2,h3,h4,h5,h6 { color:#00695C; margin:0.6em 0 0.3em; line-height:1.5; }
+  pre { background:#EEE9DC; padding:12px; border-radius:8px; overflow-x:auto; direction:ltr; text-align:left; }
+  code { font-family:monospace; background:#EEE9DC; padding:2px 6px; border-radius:4px; direction:ltr; display:inline-block; }
+  pre code { background:transparent; padding:0; display:block; }
+  blockquote { border-right:4px solid #00695C; margin:8px 0; padding:4px 12px; background:#F0EBDF; }
+  a { color:#00695C; }
+  hr { border:none; border-top:2px dashed #CFC7B8; margin:16px 0; }
+  ul, ol { padding-right:24px; padding-left:24px; }
+  p { margin:0.5em 0; }
+</style>
+</head>
+<body>
+<div id="content"></div>
+<script>
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function inline(s){
+  return s.replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+}
+function md2html(src){
+  var out = [], lines = esc(src).split('\n');
+  var inList = false, inQuote = false, inCode = false;
+  function closeList(){ if (inList) { out.push('</ul>'); inList = false; } }
+  function closeQuote(){ if (inQuote) { out.push('</blockquote>'); inQuote = false; } }
+  for (var i = 0; i < lines.length; i++) {
+    var l = lines[i];
+    if (/^```/.test(l)) {
+      if (inCode) { out.push('</code></pre>'); inCode = false; }
+      else { closeList(); closeQuote(); out.push('<pre><code>'); inCode = true; }
+      continue;
+    }
+    if (inCode) { out.push(l); continue; }
+    var h = l.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { closeList(); closeQuote(); out.push('<h' + h[1].length + '>' + inline(h[2]) + '</h' + h[1].length + '>'); continue; }
+    if (/^\s*[-*]\s+/.test(l)) {
+      closeQuote();
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push('<li>' + inline(l.replace(/^\s*[-*]\s+/, '')) + '</li>');
+      continue;
+    }
+    if (/^\s*&gt;\s?/.test(l)) {
+      closeList();
+      if (!inQuote) { out.push('<blockquote>'); inQuote = true; }
+      out.push(inline(l.replace(/^\s*&gt;\s?/, '')));
+      continue;
+    }
+    if (/^---+\s*$/.test(l)) { closeList(); closeQuote(); out.push('<hr>'); continue; }
+    if (l.trim() === '') { closeList(); closeQuote(); continue; }
+    closeList(); closeQuote();
+    out.push('<p>' + inline(l) + '</p>');
+  }
+  closeList(); closeQuote();
+  if (inCode) out.push('</code></pre>');
+  return out.join('\n');
+}
+function render(mdText){
+  document.getElementById('content').innerHTML = md2html(mdText || '');
+}
+</script>
+</body>
+</html>

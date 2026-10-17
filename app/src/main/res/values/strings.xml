@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">کاغذ</string>
+    <string name="notes_count">%1$d یادداشت</string>
+    <string name="new_note">یادداشت جدید</string>
+    <string name="empty_list">هنوز یادداشتی نداری\nبا دکمهٔ + اولین یادداشتت را بساز</string>
+    <string name="untitled">بی‌عنوان</string>
+    <string name="preview">پیش‌نمایش</string>
+    <string name="edit">ویرایش</string>
+    <string name="save">ذخیره</string>
+    <string name="saved">ذخیره شد</string>
+    <string name="save_error">ذخیره نشد!</string>
+    <string name="delete_title">حذف یادداشت</string>
+    <string name="delete_msg">«%1$s» حذف شود؟</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">بی‌خیال</string>
+    <string name="back">بازگشت</string>
+    <string name="title_hint">عنوان…</string>
+    <string name="body_hint">بنویس… (مارک‌داون پشتیبانی می‌شود)</string>
+    <string name="editor_title">یادداشت</string>
+</resources>
